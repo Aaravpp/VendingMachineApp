@@ -22,4 +22,13 @@ class product:
         
         return False
     
-    
+class VendingMachineApp:
+
+    def __init__(self, window):
+        pass
+
+window = Tk()
+
+app = VendingMachineApp(window)
+
+window.mainloop()
