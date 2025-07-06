@@ -25,7 +25,9 @@ class product:
 class VendingMachineApp:
 
     def __init__(self, window):
-        pass
+        
+        window.title("Vending Machine")
+        window.geometry("400x500+550+130")
 
 window = Tk()
 
