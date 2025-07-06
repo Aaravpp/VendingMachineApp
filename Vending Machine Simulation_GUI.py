@@ -7,4 +7,9 @@ class product:
         self.name = name
         self.price = price
         self.quantity = quantity
-        
+    
+    def is_available(self, quantity):
+
+        return quantity <= self.quantity
+    
+    
