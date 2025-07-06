@@ -28,7 +28,7 @@ class VendingMachineApp:
     def __init__(self, window):
         
         window.title("Vending Machine")
-        window.geometry("400x500+550+130")
+        window.geometry("400x600+550+130")
 
         self.products = {
 
@@ -47,48 +47,48 @@ class VendingMachineApp:
             13: product("Coca-Cola", 40, 7),
             14: product("Red Bull", 165, 7),
             15: product("Fanta", 40, 4)
-
+        
         }
+
+        self.selected_code = IntVar()
+        self.quantity = StringVar()
+        self.amount = StringVar()
+        self.total_cost = StringVar(value="Total: ₹0")
 
         self.widgets()
 
     def widgets(self):
 
         Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack()
+        
+        self.product_button = []
 
-        self.products = []
+        for code, product in self.products.items():
 
-        for index, product in self.products:
-
-            status = f"Out Of Stock" if product.quantity == 0 else "Available"
+            status = f"{product.quantity} left" if product.quantity > 0 else "Out Of Stock"
             text = f"{product.name} - ₹{product.price}  ({status})"
-            state = DISABLED if product.quantity == 0 else NORMAL
+            state = NORMAL if product.quantity > 0 else DISABLED
 
-            button = RADIOBUTTON(
-
+            button = Radiobutton(
                 window,
-                text = text,
-                Variable = self.selected_code,
-                value = index,
-                ANCHOR = "w",
-                justify = "left",
-                state = state,
-                disabledforground = "gray"
-
+                text=text,
+                variable=self.selected_code,
+                value=code,
+                bg="white",
+                anchor="w",
+                justify="left",
+                state=state,
+                disabledforeground="gray"
             )
 
             button.pack()
-            self.products.append(button)
-
-            self.selected_code = IntVar()
-            self.quantity = StringVar()
-            self.amount = StringVar()
-            self.total_cost = StringVar(value="Total: ₹0")
+            self.product_button.append(button)
 
         Label(window, text="Quantity:").pack()
         quantity_box = Entry(window, textvariable=self.quantity)
         quantity_box.pack()
-
+        quantity_box.bind("<KeyRelease>", self.update_total_cost)
+ 
         Label(window, text="Insert Money (₹):").pack()
         Entry(window, textvariable=self.amount).pack()
 
@@ -100,9 +100,9 @@ class VendingMachineApp:
 
         try:
 
-            index = self.selected_code.get()
+            code = self.selected_code.get()
             quantity = int(self.quantity.get())
-            product = self.products[index]
+            product = self.products[code]
 
             if product and quantity > 0:
 
@@ -171,8 +171,9 @@ class VendingMachineApp:
             state = DISABLED if product.quantity == 0 else NORMAL
             self.product_buttons[idx].config(text=text, state=state)
 
-window = Tk()
+if __name__ == "__main__":
+    window = Tk()
 
-app = VendingMachineApp(window)
+    app = VendingMachineApp(window)
 
-window.mainloop()
+    window.mainloop()
