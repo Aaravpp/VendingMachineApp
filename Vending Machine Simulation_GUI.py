@@ -3,4 +3,8 @@ from tkinter import *
 class product:
 
     def __init__(self, name, price, quantity):
-        pass
+        
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+        
