@@ -137,7 +137,7 @@ class VendingMachineApp:
 
             if not product.is_available:
 
-                messagebox.showwarning("Out Of Stock", f"Out Of Stock \nOnly {product.quantity} Available")
+                messagebox.showinfo("Out Of Stock", f"Only {product.quantity} Available")
 
                 return
             
@@ -145,10 +145,23 @@ class VendingMachineApp:
 
             if amount < total:
 
-                messagebox.showwarning("Error", f"Not enough money  Total: ₹{total}")
+                messagebox.showerror("Error", f"Not enough money  Total: ₹{total}")
 
                 return
             
+            product.dispense(quantity)
+
+            change = amount - total
+
+            messagebox.showinfo("Success", f"Dispensed {quantity} {product.name} \n{change}\n Have a Nice Day!")
+
+            self.restock_alert()
+            self.update_total_cost()
+
+        except:
+
+            messagebox.showerror("Input Error", "Please enter valid numbers")
+
 
 
 
