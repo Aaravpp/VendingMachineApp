@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 class product:
 
@@ -94,6 +95,33 @@ class VendingMachineApp:
         Label(window, textvariable=self.total_cost).pack()
 
         Button(window, text="Purchase", command=self.purchase, bg="#4CAF50").pack()
+
+    def update_total_cost(self, event=None):
+
+        try:
+
+            index = self.selected_code.get()
+            quantity = int(self.quantity.get())
+            product = self.products[index]
+
+            if product and quantity > 0:
+
+                total = product.price * quantity
+
+                self.total_cost.set(total)
+
+            else:
+
+                self.total_cost.set(total = 0)
+
+        except:
+            self.total_cost.set(total = 0)
+
+
+
+
+
+
 
 
 window = Tk()
