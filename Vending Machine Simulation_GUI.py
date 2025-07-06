@@ -87,7 +87,10 @@ class VendingMachineApp:
         Label(window, text="Quantity:").pack()
         quantity_box = Entry(window, textvariable=self.quantity)
         quantity_box.pack()
-        
+
+        Label(window, text="Insert Money (₹):").pack()
+        Entry(window, textvariable=self.amount).pack()
+
 
 window = Tk()
 
