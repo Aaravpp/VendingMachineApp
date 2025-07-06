@@ -61,6 +61,19 @@ class VendingMachineApp:
 
         Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack()
         
+        canvas = Canvas(window, bg="white", height=250)
+        scrollbar = Scrollbar(window, orient="vertical", command=canvas.yview)
+        self.products_frame = Frame(canvas, bg="white")
+
+        self.products_frame.bind(
+            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=self.products_frame      , anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True, padx=10)
+        scrollbar.pack(side="right", fill="y")
         self.product_button = []
 
         for code, product in self.products.items():
@@ -70,7 +83,7 @@ class VendingMachineApp:
             state = NORMAL if product.quantity > 0 else DISABLED
 
             button = Radiobutton(
-                window,
+                self.products_frame,
                 text=text,
                 variable=self.selected_code,
                 value=code,
@@ -81,7 +94,7 @@ class VendingMachineApp:
                 disabledforeground="gray"
             )
 
-            button.pack()
+            button.pack(anchor="w")
             self.product_button.append(button)
 
         Label(window, text="Quantity:").pack()
