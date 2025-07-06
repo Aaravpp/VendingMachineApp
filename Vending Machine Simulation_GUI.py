@@ -49,6 +49,14 @@ class VendingMachineApp:
 
         }
 
+        self.widgets()
+
+    def widgets(self):
+
+        Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack()
+
+        
+
 window = Tk()
 
 app = VendingMachineApp(window)
