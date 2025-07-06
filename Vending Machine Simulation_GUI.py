@@ -117,6 +117,15 @@ class VendingMachineApp:
         except:
             self.total_cost.set(total = 0)
 
+    def restock_alert(self):
+
+        for product in self.products:
+
+            if product.quantity <= 2:
+
+                messagebox.showwarning("Low Stock Alert", "\n".join(f"[!] {product.name} has only {product.quantity} left"))
+                
+
 
 
 
