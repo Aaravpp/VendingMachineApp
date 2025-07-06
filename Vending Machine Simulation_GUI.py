@@ -12,4 +12,14 @@ class product:
 
         return quantity <= self.quantity
     
+    def dispense(self, quantity):
+
+        if self.is_available(quantity):
+
+            self.quantity -= quantity
+
+            return True
+        
+        return False
+    
     
