@@ -91,6 +91,10 @@ class VendingMachineApp:
         Label(window, text="Insert Money (₹):").pack()
         Entry(window, textvariable=self.amount).pack()
 
+        Label(window, textvariable=self.total_cost).pack()
+
+        Button(window, text="Purchase", command=self.purchase, bg="#4CAF50").pack()
+
 
 window = Tk()
 
