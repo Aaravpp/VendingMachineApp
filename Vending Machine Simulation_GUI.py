@@ -55,7 +55,34 @@ class VendingMachineApp:
 
         Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack()
 
-        
+        self.products = []
+
+        for index, product in self.products:
+
+            status = f"Out Of Stock" if product.quantity == 0 else "Available"
+            text = f"{product.name} - ₹{product.price}  ({status})"
+            state = DISABLED if product.quantity == 0 else NORMAL
+
+            button = RADIOBUTTON(
+
+                window,
+                text = text,
+                Variable = self.selected_code,
+                value = index,
+                ANCHOR = "w",
+                justify = "left",
+                state = state,
+                disabledforground = "gray"
+
+            )
+
+            button.pack()
+            self.products.append(button)
+
+            self.selected_code = IntVar()
+            self.quantity = StringVar()
+            self.amount = StringVar()
+            self.total_cost = StringVar(value="Total: ₹0")
 
 window = Tk()
 
