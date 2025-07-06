@@ -84,6 +84,11 @@ class VendingMachineApp:
             self.amount = StringVar()
             self.total_cost = StringVar(value="Total: ₹0")
 
+        Label(window, text="Quantity:").pack()
+        quantity_box = Entry(window, textvariable=self.quantity)
+        quantity_box.pack()
+        
+
 window = Tk()
 
 app = VendingMachineApp(window)
