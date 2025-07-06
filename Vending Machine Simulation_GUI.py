@@ -124,8 +124,31 @@ class VendingMachineApp:
             if product.quantity <= 2:
 
                 messagebox.showwarning("Low Stock Alert", "\n".join(f"[!] {product.name} has only {product.quantity} left"))
-                
 
+    def purchase(self):
+
+        try:
+            
+            index = self.selected_code.get()
+            quantity = int(self.quantity.get())
+            amount = int(self.amount.get())
+
+            product = self.products[index]
+
+            if not product.is_available:
+
+                messagebox.showwarning("Out Of Stock", f"Out Of Stock \nOnly {product.quantity} Available")
+
+                return
+            
+            total = product.price * quantity
+
+            if amount < total:
+
+                messagebox.showwarning("Error", f"Not enough money  Total: ₹{total}")
+
+                return
+            
 
 
 
