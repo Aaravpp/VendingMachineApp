@@ -163,11 +163,13 @@ class VendingMachineApp:
             messagebox.showerror("Input Error", "Please enter valid numbers")
 
 
+    def update_product(self):
 
-
-
-
-
+         for idx, product in self.products:
+            status = f"Out of Stock" if product.quantity == 0 else "Available"
+            text = f"{product.name} - ₹{product.price} ({status})"
+            state = DISABLED if product.quantity == 0 else NORMAL
+            self.product_buttons[idx].config(text=text, state=state)
 
 window = Tk()
 
