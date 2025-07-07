@@ -190,6 +190,7 @@ class VendingMachineApp:
             self.quantity.set("")
             self.amount.set("")
             self.selected_code.set(0)
+            self.total_cost.set("Total: ₹0")
 
         except:
 
