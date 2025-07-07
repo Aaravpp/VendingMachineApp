@@ -27,8 +27,9 @@ class VendingMachineApp:
 
     def __init__(self, window):
         
-        window.title("Vending Machine")
-        window.geometry("400x600+550+130")
+        self.window = window
+        self.window.title("Vending Machine")
+        self.window.geometry("600x500+550+130")
 
         self.products = {
 
@@ -59,7 +60,7 @@ class VendingMachineApp:
 
     def widgets(self):
 
-        Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack()
+        Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack(pady=10)
         
         canvas = Canvas(window, bg="white", height=250)
         scrollbar = Scrollbar(window, orient="vertical", command=canvas.yview)
@@ -74,7 +75,8 @@ class VendingMachineApp:
 
         canvas.pack(side="left", fill="both", expand=True, padx=10)
         scrollbar.pack(side="right", fill="y")
-        self.product_button = []
+
+        self.product_buttons = []
 
         for code, product in self.products.items():
 
@@ -95,17 +97,17 @@ class VendingMachineApp:
             )
 
             button.pack(anchor="w")
-            self.product_button.append(button)
+            self.product_buttons.append(button)
 
-        Label(window, text="Quantity:").pack()
+        Label(window, text="Quantity:").pack(pady=5)
         quantity_box = Entry(window, textvariable=self.quantity)
         quantity_box.pack()
         quantity_box.bind("<KeyRelease>", self.update_total_cost)
  
-        Label(window, text="Insert Money (₹):").pack()
+        Label(window, text="Insert Money (₹):").pack(pady=5)
         Entry(window, textvariable=self.amount).pack()
 
-        Label(window, textvariable=self.total_cost).pack()
+        Label(window, textvariable=self.total_cost).pack(pady=5)
 
         Button(window, text="Purchase", command=self.purchase, bg="#4CAF50").pack()
 
@@ -114,47 +116,59 @@ class VendingMachineApp:
         try:
 
             code = self.selected_code.get()
-            quantity = int(self.quantity.get())
+            qty = int(self.quantity.get())
             product = self.products[code]
 
-            if product and quantity > 0:
+            if product and qty > 0:
 
-                total = product.price * quantity
+                total = product.price * qty
 
-                self.total_cost.set(total)
+                self.total_cost.set(f"Total: ₹{total}")
 
             else:
 
-                self.total_cost.set(total = 0)
+                self.total_cost.set("Total: ₹0")
 
         except:
-            self.total_cost.set(total = 0)
+            self.total_cost.set("Total: ₹0")
 
     def restock_alert(self):
 
-        for product in self.products:
+        alerts = []
+
+        for product in self.products.values():
 
             if product.quantity <= 2:
 
-                messagebox.showwarning("Low Stock Alert", "\n".join(f"[!] {product.name} has only {product.quantity} left"))
+                alerts.append(f"[!] {product.name} has only {product.quantity} left")
+        
+        if alerts:
+
+            messagebox.showwarning("Low Stock Alert", "\n".join(alerts))
 
     def purchase(self):
 
         try:
             
-            index = self.selected_code.get()
-            quantity = int(self.quantity.get())
+            code = self.selected_code.get()
+            qty = int(self.quantity.get())
             amount = int(self.amount.get())
 
-            product = self.products[index]
+            product = self.products[code]
 
-            if not product.is_available:
+            if not product:
+
+                messagebox.showerror("Error", "No product selected")
+
+                return
+
+            if not product.is_available(qty):
 
                 messagebox.showinfo("Out Of Stock", f"Only {product.quantity} Available")
 
                 return
             
-            total = product.price * quantity
+            total = product.price * qty
 
             if amount < total:
 
@@ -162,12 +176,13 @@ class VendingMachineApp:
 
                 return
             
-            product.dispense(quantity)
+            product.dispense(qty)
 
             change = amount - total
 
-            messagebox.showinfo("Success", f"Dispensed {quantity} {product.name} \n{change}\n Have a Nice Day!")
+            messagebox.showinfo("Success", f"Dispensed {qty} {product.name} \n{change}\n Have a Nice Day!")
 
+            self.update_product()
             self.restock_alert()
             self.update_total_cost()
 
@@ -178,13 +193,14 @@ class VendingMachineApp:
 
     def update_product(self):
 
-         for idx, product in self.products:
-            status = f"Out of Stock" if product.quantity == 0 else "Available"
-            text = f"{product.name} - ₹{product.price} ({status})"
-            state = DISABLED if product.quantity == 0 else NORMAL
-            self.product_buttons[idx].config(text=text, state=state)
+        for idx, (code, product) in enumerate(self.products.items()):
+           status = f"{product.quantity} left" if product.quantity > 0 else "Out of Stock"
+           text = f"{product.name} - ₹{product.price} ({status})"
+           state = NORMAL if product.quantity > 0 else DISABLED
+           self.product_buttons[idx].config(text=text, state=state)
 
 if __name__ == "__main__":
+
     window = Tk()
 
     app = VendingMachineApp(window)
