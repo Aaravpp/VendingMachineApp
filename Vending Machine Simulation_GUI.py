@@ -29,7 +29,9 @@ class VendingMachineApp:
         
         self.window = window
         self.window.title("Vending Machine")
-        self.window.geometry("600x500+550+130")
+        self.window.geometry("600x480+550+130")
+        # window.config(background="#FFFFFF")
+
 
         self.products = {
 
@@ -60,7 +62,7 @@ class VendingMachineApp:
 
     def widgets(self):
 
-        Label(window, text="Vending Machine", font=("Helvetica", 18, "bold")).pack(pady=10)
+        Label(window, text="Vending Machine",fg="Blue", font=("Helvetica", 18, "bold")).pack(pady=10)
         
         canvas = Canvas(window, bg="white", height=250)
         scrollbar = Scrollbar(window, orient="vertical", command=canvas.yview)
@@ -73,7 +75,7 @@ class VendingMachineApp:
         canvas.create_window((0, 0), window=self.products_frame      , anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        canvas.pack(side="left", fill="both", expand=True, padx=10)
+        canvas.pack(side="left", fill="both", padx=10)
         scrollbar.pack(side="right", fill="y")
 
         self.product_buttons = []
@@ -99,9 +101,9 @@ class VendingMachineApp:
             button.pack(anchor="w")
             self.product_buttons.append(button)
 
-        Label(window, text="Quantity:").pack(pady=5)
+        Label(window, text="Quantity:").pack(pady=(10, 2))
         quantity_box = Entry(window, textvariable=self.quantity)
-        quantity_box.pack()
+        quantity_box.pack(pady=(0, 10))
         quantity_box.bind("<KeyRelease>", self.update_total_cost)
  
         Label(window, text="Insert Money (₹):").pack(pady=5)
@@ -172,7 +174,7 @@ class VendingMachineApp:
 
             if amount < total:
 
-                messagebox.showerror("Error", f"Not enough money  Total: ₹{total}")
+                messagebox.showerror("Error", f"Not enough money \nTotal: ₹{total}")
 
                 return
             
@@ -180,11 +182,14 @@ class VendingMachineApp:
 
             change = amount - total
 
-            messagebox.showinfo("Success", f"Dispensed {qty} {product.name} \n{change}\n Have a Nice Day!")
+            messagebox.showinfo("Success", f"Dispensed {qty} {product.name} \nChange: {change}\nHave a Nice Day!")
 
             self.update_product()
             self.restock_alert()
             self.update_total_cost()
+            self.quantity.set("")
+            self.amount.set("")
+            self.selected_code.set(0)
 
         except:
 
@@ -194,9 +199,13 @@ class VendingMachineApp:
     def update_product(self):
 
         for idx, (code, product) in enumerate(self.products.items()):
+           
            status = f"{product.quantity} left" if product.quantity > 0 else "Out of Stock"
+
            text = f"{product.name} - ₹{product.price} ({status})"
+
            state = NORMAL if product.quantity > 0 else DISABLED
+           
            self.product_buttons[idx].config(text=text, state=state)
 
 if __name__ == "__main__":
