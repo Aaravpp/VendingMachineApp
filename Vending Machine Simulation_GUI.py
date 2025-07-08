@@ -29,7 +29,7 @@ class VendingMachineApp:
         
         self.window = window
         self.window.title("Vending Machine")
-        self.window.geometry("600x480+550+130")
+        self.window.geometry("600x480+450+130")
         # window.config(background="#FFFFFF")
 
 
